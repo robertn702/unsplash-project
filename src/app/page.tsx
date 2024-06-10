@@ -6,13 +6,10 @@ import ImagePagination from "@/app/_components/image-pagination";
 import SearchInput from "@/app/_components/search-input";
 import SortSelect from "@/app/_components/sort-select";
 import unsplash from "@/app/_libs/unsplash";
-import photoResponseSuccess from "@/app/_mocks/photo-response-success";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { ColorId, SearchOrderBy } from "unsplash-js";
-import { ApiResponse } from "unsplash-js/src/helpers/response";
-import { Photos } from "unsplash-js/src/methods/search/types/response";
 
 type UnsplashGetPhotosOptions = Parameters<typeof unsplash.search.getPhotos>[0];
 
@@ -38,8 +35,6 @@ export default function Home() {
 
     return options;
   }, [color, orderBy, page, query])
-
-  let mockData = photoResponseSuccess as unknown as ApiResponse<Photos>
 
   const {data, isLoading} = useQuery({
     queryKey: ["search", unsplashSearchOptions],
