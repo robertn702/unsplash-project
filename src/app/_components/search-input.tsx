@@ -9,9 +9,9 @@ export default function SearchInput({}: SearchInputProps): ReactElement {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter()
+  const urlQuery = searchParams.get("q");
 
-  // todo: add default value from url params
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState(urlQuery || "")
   return (
     <input
       className="input input-primary"
