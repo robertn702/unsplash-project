@@ -2,6 +2,7 @@
 
 import ColorFilterSelect from "@/app/_components/color-filter-select";
 import ImageGrid from "@/app/_components/image-grid";
+import ImagePagination from "@/app/_components/image-pagination";
 import SearchInput from "@/app/_components/search-input";
 import SortSelect from "@/app/_components/sort-select";
 import unsplash from "@/app/_libs/unsplash";
@@ -64,13 +65,14 @@ export default function Home() {
       {/* search bar */}
       <SearchInput/>
       {/* filter / sort */}
-      <div className={"flex flex-row gap-4 items-center w-full"}>
+      <div className={"flex flex-row gap-4 items-center justify-center w-full"}>
         <ColorFilterSelect/>
         <SortSelect/>
       </div>
       {/* image grid */}
       <ImageGrid isLoading={isLoading} images={mockData?.response?.results || []}/>
       {/* pagination */}
+      <ImagePagination isDisabled={isLoading || !mockData.response} totalPages={mockData.response?.total_pages}/>
     </main>
   );
 }
