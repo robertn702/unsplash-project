@@ -15,31 +15,37 @@ export default function ImagePagination({isDisabled, totalPages}: ImagePaginatio
 
   const updateSearchParams = useUpdateSearchParams();
 
-  // TODO: handle disabled states when out of range
   return (
     <div className={"join"}>
-      <button className="join-item btn" onClick={() => {
-        // go to first
-        updateSearchParams("page", "1");
-      }}>«
+      <button
+        className={clsx("join-item btn", {"btn-disabled": isDisabled || !pageNum || pageNum <= 1})}
+        onClick={() => {
+          // go to first
+          updateSearchParams("page", "1");
+        }}>«
       </button>
-      <button className={clsx("join-item btn", {"btn-disabled": isDisabled || !pageNum || pageNum <= 1})}
-              onClick={() => {
-                // go to previous
-                updateSearchParams("page", (pageNum - 1).toString());
-              }}>‹
+      <button
+        className={clsx("join-item btn", {"btn-disabled": isDisabled || !pageNum || pageNum <= 1})}
+        onClick={() => {
+          // go to previous
+          updateSearchParams("page", (pageNum - 1).toString());
+        }}>‹
       </button>
       <button className="join-item btn">{`${urlPage || "1"}`}</button>
-      <button className="join-item btn" onClick={() => {
-        // go to next
-        updateSearchParams("page", (pageNum + 1).toString());
-      }}>›
+      <button
+        className={clsx("join-item btn", {"btn-disabled": isDisabled || !pageNum || !totalPages || pageNum >= totalPages})}
+        onClick={() => {
+          // go to next
+          updateSearchParams("page", (pageNum + 1).toString());
+        }}>›
       </button>
-      <button className={clsx("join-item btn", {"btn-disabled": isDisabled})} onClick={() => {
-        if (!totalPages) return;
-        // go to last
-        updateSearchParams("page", totalPages.toString());
-      }}>»
+      <button
+        className={clsx("join-item btn", {"btn-disabled": isDisabled || !pageNum || !totalPages || pageNum >= totalPages})}
+        onClick={() => {
+          if (!totalPages) return;
+          // go to last
+          updateSearchParams("page", totalPages.toString());
+        }}>»
       </button>
     </div>
   );
