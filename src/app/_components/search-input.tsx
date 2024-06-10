@@ -1,15 +1,15 @@
 "use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useUpdateSearchParams from "@/app/_hooks/use-update-search-params";
+import { useSearchParams } from "next/navigation";
 import { ReactElement, useState } from "react";
 
 export type SearchInputProps = Readonly<{}>
 
 export default function SearchInput({}: SearchInputProps): ReactElement {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter()
   const urlQuery = searchParams.get("q");
+  const updateSearchParams = useUpdateSearchParams();
 
   const [query, setQuery] = useState(urlQuery || "")
   return (
@@ -21,9 +21,7 @@ export default function SearchInput({}: SearchInputProps): ReactElement {
       onKeyUp={(e) => {
         // submit on enter
         if (e.key === "Enter") {
-          const params = new URLSearchParams(Array.from(searchParams.entries()));
-          params.set("q", query);
-          router.replace(pathname + "?" + params.toString());
+          updateSearchParams("q", query);
         }
       }}
       onChange={(e) => {

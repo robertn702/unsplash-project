@@ -1,7 +1,8 @@
 "use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ReactElement, useState } from "react";
+import useUpdateSearchParams from "@/app/_hooks/use-update-search-params";
+import { useSearchParams } from "next/navigation";
+import { ReactElement } from "react";
 
 /**
  * Note: These were found in the unsplash-js types. Not sure where they are documented.
@@ -27,9 +28,8 @@ export type ColorFilterSelectProps = Readonly<{}>
 
 export default function ColorFilterSelect({}: ColorFilterSelectProps): ReactElement {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter()
   const urlColor = searchParams.get("color");
+  const updateSearchParams = useUpdateSearchParams();
 
   return (
     <label className={"form-control"}>
@@ -42,13 +42,11 @@ export default function ColorFilterSelect({}: ColorFilterSelectProps): ReactElem
         onChange={(e) => {
           const selectedKey = e.target.value;
           // todo: validate the key values
-          const params = new URLSearchParams(Array.from(searchParams.entries()));
           if (selectedKey === "all") {
-            params.delete("color");
+            updateSearchParams("color", null);
           } else {
-            params.set("color", selectedKey);
+            updateSearchParams("color", selectedKey);
           }
-          router.replace(pathname + "?" + params.toString());
         }}
       >
         {colorOptions.map(({key, label}) => (

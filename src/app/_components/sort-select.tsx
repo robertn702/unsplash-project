@@ -1,6 +1,7 @@
 "use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useUpdateSearchParams from "@/app/_hooks/use-update-search-params";
+import { useSearchParams } from "next/navigation";
 import { ReactElement } from "react";
 
 /**
@@ -18,8 +19,7 @@ export type SortSelectProps = Readonly<{}>
 
 export default function SortSelect({}: SortSelectProps): ReactElement {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter()
+  const updateSearchParams = useUpdateSearchParams();
   {/* TODO: validate url params */
   }
   const urlSortBy = searchParams.get("sort_by");
@@ -35,9 +35,7 @@ export default function SortSelect({}: SortSelectProps): ReactElement {
         value={urlSortBy || "latest"}
         onChange={(e) => {
           const selectedKey = e.target.value;
-          const params = new URLSearchParams(Array.from(searchParams.entries()));
-          params.set("sort_by", selectedKey);
-          router.replace(pathname + "?" + params.toString());
+          updateSearchParams("sort_by", selectedKey);
         }}
       >
         {sortByOptions.map(({key, label}) => (
