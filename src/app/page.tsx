@@ -19,12 +19,12 @@ type UnsplashGetPhotosOptions = Parameters<typeof unsplash.search.getPhotos>[0];
 export default function Home() {
   // todo: consider using params directly from props
   const searchParams = useSearchParams();
+  const query = searchParams.get("q");
+  const color = searchParams.get("color");
+  const orderBy = searchParams.get("sort_by");
+  const page = searchParams.get("page");
 
   const unsplashSearchOptions = useMemo<UnsplashGetPhotosOptions>(() => {
-    const query = searchParams.get("q");
-    const color = searchParams.get("color");
-    const orderBy = searchParams.get("order_by");
-    const page = searchParams.get("page");
 
     // TODO: properly validate the search params
     const options: UnsplashGetPhotosOptions = {
@@ -37,7 +37,7 @@ export default function Home() {
     }
 
     return options;
-  }, [searchParams])
+  }, [color, orderBy, page, query])
 
   let mockData = photoResponseSuccess as unknown as ApiResponse<Photos>
 
@@ -59,16 +59,12 @@ export default function Home() {
       gap-2
       md:p-24
     `}>
-      {/* search bar */}
       <SearchInput/>
-      {/* filter / sort */}
       <div className={"flex flex-row gap-4 items-center justify-center w-full"}>
         <ColorFilterSelect/>
         <SortSelect/>
       </div>
-      {/* image grid */}
       <ImageGrid isLoading={isLoading} images={data?.response?.results || []}/>
-      {/* pagination */}
       <ImagePagination isDisabled={isLoading || !data?.response} totalPages={data?.response?.total_pages}/>
     </main>
   );
