@@ -9,7 +9,7 @@ export type ImageGridProps = Readonly<{
 
 export default function ImageGrid({images, isLoading}: ImageGridProps): ReactElement {
   if (isLoading) {
-    return <div className={`flex-grow`}>Loading...</div>
+    return <div className={`flex flex-grow items-center justify-center text-center`}>Loading...</div>
   }
 
   if (!isLoading && images.length === 0) {
