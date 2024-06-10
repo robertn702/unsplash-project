@@ -31,7 +31,9 @@ export default function Home() {
       query: query || "",
       color: color as ColorId | undefined,
       orderBy: (orderBy || "latest") as SearchOrderBy,
-      page: page ? parseInt(page, 10) : 1
+      page: page ? parseInt(page, 10) : 1,
+      // divisible by 2, 3, 4 for even responsive grid
+      perPage: 12,
     }
 
     return options;
@@ -40,16 +42,11 @@ export default function Home() {
   let mockData = photoResponseSuccess as unknown as ApiResponse<Photos>
 
   const {data, isLoading} = useQuery({
-    // TODO: Add relevant search params
     queryKey: ["search", unsplashSearchOptions],
     queryFn: () => {
       return unsplash.search.getPhotos(unsplashSearchOptions)
     },
-    // todo: enable when ready
-    enabled: false
   })
-  console.log(data);
-  console.log(`mockData: `, mockData)
 
   return (
     <main className={`
@@ -70,9 +67,9 @@ export default function Home() {
         <SortSelect/>
       </div>
       {/* image grid */}
-      <ImageGrid isLoading={isLoading} images={mockData?.response?.results || []}/>
+      <ImageGrid isLoading={isLoading} images={data?.response?.results || []}/>
       {/* pagination */}
-      <ImagePagination isDisabled={isLoading || !mockData.response} totalPages={mockData.response?.total_pages}/>
+      <ImagePagination isDisabled={isLoading || !data?.response} totalPages={data?.response?.total_pages}/>
     </main>
   );
 }
