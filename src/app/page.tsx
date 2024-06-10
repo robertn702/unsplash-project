@@ -1,20 +1,17 @@
 "use client"
 
 import ColorFilterSelect from "@/app/_components/color-filter-select";
+import ImageGrid from "@/app/_components/image-grid";
 import SearchInput from "@/app/_components/search-input";
 import SortSelect from "@/app/_components/sort-select";
-import { createApi } from "unsplash-js";
-
-
-const unsplashKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
-if (!unsplashKey) {
-  throw new Error("unsplash access key is not defined");
-}
 import unsplash from "@/app/_libs/unsplash";
+import photoResponseSuccess from "@/app/_mocks/photo-response-success";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { ColorId, SearchOrderBy } from "unsplash-js";
+import { ApiResponse } from "unsplash-js/src/helpers/response";
+import { Photos } from "unsplash-js/src/methods/search/types/response";
 
 type UnsplashGetPhotosOptions = Parameters<typeof unsplash.search.getPhotos>[0];
 
@@ -39,7 +36,9 @@ export default function Home() {
     return options;
   }, [searchParams])
 
-  const {data} = useQuery({
+  let mockData = photoResponseSuccess as unknown as ApiResponse<Photos>
+
+  const {data, isLoading} = useQuery({
     // TODO: Add relevant search params
     queryKey: ["search", unsplashSearchOptions],
     queryFn: () => {
@@ -48,18 +47,29 @@ export default function Home() {
     // todo: enable when ready
     enabled: false
   })
+  console.log(data);
+  console.log(`mockData: `, mockData)
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className={`
+      flex 
+      min-h-screen 
+      flex-col 
+      items-center 
+      justify-between 
+      p-8 
+      gap-2
+      md:p-24
+    `}>
       {/* search bar */}
       <SearchInput/>
       {/* filter / sort */}
-      <div className={"flex flex-row items-center"}>
+      <div className={"flex flex-row gap-4 items-center w-full"}>
         <ColorFilterSelect/>
         <SortSelect/>
       </div>
       {/* image grid */}
-
+      <ImageGrid isLoading={isLoading} images={mockData?.response?.results || []}/>
       {/* pagination */}
     </main>
   );
